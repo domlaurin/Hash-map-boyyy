@@ -9,13 +9,31 @@ class HashMap
   end
 
   def include?(key)
-    bucket(key).include?(key)
+    self.bucket(key).include?(key)
   end
 
   def set(key, val)
+    if !self.include?(key)
+      @count += 1
+      if @count > num_buckets
+        resize!
+      end
+      self.bucket(key).append(key, val)
+    else
+      self.bucket(key).each do |node|
+        if node.key == key
+          node.val = val
+        end
+      end
+    end
   end
-
+  
   def get(key)
+    self.bucket(key).each do |node|
+      if node.key == key
+        return node.val
+      end
+    end
   end
 
   def delete(key)
@@ -35,7 +53,7 @@ class HashMap
   alias_method :[], :get
   alias_method :[]=, :set
 
-  private
+  # private
 
   def num_buckets
     @store.length
@@ -46,7 +64,7 @@ class HashMap
 
   def bucket(key)
     # optional but useful; return the bucket corresponding to `key`
-    @store[key.hash % num_buckets]
+    @store[key.hash % self.num_buckets]
   end
 end
 
