@@ -14,12 +14,18 @@ class Node
     "#{@key}: #{@val}"
   end
 
+#  head 1 2 3 tail
   def remove
-    # optional but useful, connects previous link to next link
-    # and removes self from list.
+    # debugger
+    @prev.next = @next
+    @next.prev = @prev
+
   end
 end
 
+    # optional but useful, connects previous link to next link
+    # and removes self from list.
+    
 class LinkedList
   include Enumerable
 
@@ -56,6 +62,12 @@ class LinkedList
   end
 
   def include?(key)
+    self.each do |node|
+      if node.key == key
+        return true
+      end
+    end
+    false
   end
 
 #   head 5 7 tail
@@ -77,6 +89,8 @@ class LinkedList
     new_node = Node.new(key, val)
     @tail.prev.next = new_node
     @tail.prev = new_node
+    # new_node.next = @tail
+    # new_node.prev = @tail.prev.prev
   end
   #Append a new node to the end of the list
 
@@ -88,31 +102,37 @@ class LinkedList
     end
   end
 
-  def remove(key)
-    current_node = self.first
-      until current_node == tail
-        if current_node.key = key
-          
-    
-      if node.key == key
-    
-  end
-
- head 4 7 2 3 tail
- remove 2 
- make it so 7 points to 3
- make it so 3 points to 7
-
-reassign the previous node (node.prev) to point to the next node (node.next)
-reassign the next node (node.prev) to point to the previous node (node.next)
-  
   def each(&block)  #{|x| print x }
     cur_node = self.first
     until cur_node == nil
       block.call(cur_node)
       cur_node = cur_node.next
     end
+
   end
+
+  def remove(key)
+    # debugger
+    self.each do |node|
+      # debugger
+      if node.key == key
+        node.remove
+      end
+    end
+  end
+
+#   cur_node.prev is 7,  7.next = 3
+#   cur_node.next is 3,  3.prev = 7
+  
+
+#  head 4 7 2 3 tail
+#  remove 2 
+#  make it so 7 points to 3
+#  make it so 3 points to 7
+
+# reassign the previous node (node.prev) to point to the next node (node.next)
+# reassign the next node (node.prev) to point to the previous node (node.next)
+
   # The block passed to #each will yield to a node.
 
 
